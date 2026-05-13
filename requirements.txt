@@ -2,3 +2,4 @@ flask
 flask-cors
 discord.py
 python-dotenv
+psycopg2-binary
