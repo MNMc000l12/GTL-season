@@ -1,0 +1,41 @@
+{
+  "current_season": "MINI-SEASON",
+  "seasons": {
+    "MINI-SEASON": {
+      "name": "MINI-SEASON",
+      "status": "creating",
+      "teams": [
+        "The Bullet Bills",
+        "Valent",
+        "Spooky Spoons",
+        "Oblivion",
+        "Candy Cane",
+        "SILLY",
+        "Titan",
+        "ZENIN CLAN",
+        "Xtremely Quick Climbers"
+      ],
+      "created_by": 779805628804890644,
+      "created_at": "2026-05-13T21:14:55.584829+00:00",
+      "started_by": null,
+      "started_at": null,
+      "ended_by": null,
+      "ended_at": null,
+      "end_reason": null,
+      "kicked_teams": [
+        {
+          "team_name": "Manifest destiny",
+          "reason": "Removed from season.",
+          "kicked_by": 779805628804890644,
+          "kicked_at": "2026-05-13T21:16:39.597460+00:00"
+        },
+        {
+          "team_name": "Vital",
+          "reason": "Removed from season.",
+          "kicked_by": 779805628804890644,
+          "kicked_at": "2026-05-13T21:18:50.481395+00:00"
+        }
+      ]
+    }
+  }
+}
