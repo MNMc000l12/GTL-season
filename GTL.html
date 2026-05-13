@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GTL — Gorilla Tag League</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --green: #22c55e;
+  --green-dark: #16a34a;
+  --green-dim: #15803d;
+  --green-glow: rgba(34,197,94,0.25);
+  --green-glow2: rgba(34,197,94,0.08);
+  --black: #040904;
+  --dark: #080e08;
+  --card: #0d1a0d;
+  --card2: #111f11;
+  --card3: #152415;
+  --border: rgba(34,197,94,0.15);
+  --border2: rgba(34,197,94,0.08);
+  --text: #e2f5e2;
+  --text2: #b8d4b8;
+  --muted: #6b9e6b;
+  --muted2: #4a7a4a;
+  --danger: #ef4444;
+  --danger-dim: rgba(239,68,68,0.15);
+  --gold: #f59e0b;
+  --gold-dim: rgba(245,158,11,0.15);
+  --blue: #3b82f6;
+  --blue-dim: rgba(59,130,246,0.15);
+  --purple: #a855f7;
+  --purple-dim: rgba(168,85,247,0.15);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body{background:var(--black);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;overflow-x:hidden}
+
+body::before{
+  content:'';position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 5% 10%,rgba(34,197,94,0.06) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 70% at 95% 90%,rgba(22,163,74,0.05) 0%,transparent 60%),
+    repeating-linear-gradient(0deg,transparent,transparent 47px,rgba(34,197,94,0.025) 47px,rgba(34,197,94,0.025) 48px),
+    repeating-linear-gradient(90deg,transparent,transparent 47px,rgba(34,197,94,0.025) 47px,rgba(34,197,94,0.025) 48px);
+  pointer-events:none;z-index:0;
+}
+
+/* ─── NAV ─── */
+nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2rem;height:60px;
+  background:rgba(4,9,4,0.9);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Bebas Neue',sans-serif;font-size:1.5rem;
+  color:var(--green);letter-spacing:3px;text-decoration:none;cursor:pointer;
+}
+.nav-logo img{width:32px;height:32px;border-radius:50%;border:2px solid var(--green);object-fit:cover;}
+.nav-logo span{color:var(--muted);font-size:0.8rem;letter-spacing:2px;font-family:'Barlow Condensed',sans-serif;margin-left:2px;}
+.nav-links{display:flex;gap:2px;}
+.nav-btn{
+  background:none;border:none;color:var(--muted);
+  font-family:'Barlow Condensed',sans-serif;font-size:0.9rem;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;padding:0.4rem 0.85rem;border-radius:4px;cursor:pointer;
+  transition:color 0.2s,background 0.2s;white-space:nowrap;
+}
+.nav-btn:hover,.nav-btn.active{color:var(--green);background:rgba(34,197,94,0.08);}
+.nav-right{display:flex;align-items:center;gap:8px;}
+.search-toggle{
+  background:rgba(34,197,94,0.06);border:1px solid var(--border);color:var(--muted);
+  padding:0.35rem 0.8rem;border-radius:4px;cursor:pointer;font-size:0.85rem;
+  font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;transition:all 0.2s;
+}
+.search-toggle:hover{color:var(--green);border-color:rgba(34,197,94,0.3);}
+
+/* ─── PAGES ─── */
+.page{display:none;position:relative;z-index:1;animation:fadeIn 0.3s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ─── HERO ─── */
+.hero{
+  min-height:calc(100vh - 60px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:4rem 1rem;position:relative;
+}
+.hero-logo{
+  width:140px;height:140px;border-radius:50%;object-fit:cover;
+  border:3px solid var(--green);
+  box-shadow:0 0 50px var(--green-glow),0 0 100px rgba(34,197,94,0.08);
+  margin-bottom:1.75rem;animation:pulse 3s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 50px var(--green-glow),0 0 100px rgba(34,197,94,0.08);}
+  50%{box-shadow:0 0 70px rgba(34,197,94,0.4),0 0 140px rgba(34,197,94,0.12);}
+}
+.hero h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3.5rem,11vw,8rem);line-height:0.88;letter-spacing:4px;
+  color:var(--green);text-shadow:0 0 40px var(--green-glow);margin-bottom:0.5rem;
+}
+.hero-sub{
+  font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;letter-spacing:6px;
+  color:var(--muted);text-transform:uppercase;margin-bottom:2.5rem;
+}
+.hero-stats{display:flex;gap:3rem;margin-bottom:3rem;flex-wrap:wrap;justify-content:center;}
+.stat{text-align:center;}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--green);}
+.stat-label{font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;}
+.hero-actions{display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center;}
+
+/* ─── BUTTONS ─── */
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:0.7rem 1.75rem;
+  font-family:'Barlow Condensed',sans-serif;font-size:0.9rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;text-decoration:none;
+  border:none;border-radius:4px;cursor:pointer;transition:all 0.2s;white-space:nowrap;
+}
+.btn-primary{background:var(--green);color:#000;}
+.btn-primary:hover{background:var(--green-dark);transform:translateY(-2px);box-shadow:0 6px 20px var(--green-glow);}
+.btn-discord{background:#5865F2;color:#fff;}
+.btn-discord:hover{background:#4752c4;transform:translateY(-2px);}
+.btn-outline{background:transparent;color:var(--green);border:1px solid rgba(34,197,94,0.4);}
+.btn-outline:hover{background:rgba(34,197,94,0.07);border-color:var(--green);}
+.btn-danger{background:var(--danger);color:#fff;}
+.btn-danger:hover{background:#dc2626;}
+.btn-ghost{background:rgba(34,197,94,0.07);color:var(--green);border:1px solid var(--border);}
+.btn-ghost:hover{background:rgba(34,197,94,0.12);}
+.btn-sm{padding:0.4rem 0.9rem;font-size:0.75rem;letter-spacing:1.5px;}
+.btn-xs{padding:0.3rem 0.65rem;font-size:0.7rem;letter-spacing:1px;}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none!important;}
+
+/* ─── CONTAINER ─── */
+.container{max-width:1120px;margin:0 auto;padding:2.5rem 1.5rem;}
+
+/* ─── SECTION HEADER ─── */
+.section-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.75rem;flex-wrap:wrap;}
+.section-header h2{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:3px;color:var(--green);}
+.section-header .line{flex:1;height:1px;background:var(--border);min-width:20px;}
+.badge{
+  background:var(--green);color:#000;
+  font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:800;letter-spacing:1.5px;
+  padding:2px 7px;border-radius:2px;text-transform:uppercase;
+}
+.badge-gold{background:var(--gold);color:#000;}
+.badge-blue{background:var(--blue);color:#fff;}
+.badge-purple{background:var(--purple);color:#fff;}
+
+/* ─── CARDS ─── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.5rem;transition:border-color 0.2s,box-shadow 0.2s;}
+.card:hover{border-color:rgba(34,197,94,0.28);box-shadow:0 4px 20px rgba(34,197,94,0.04);}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;}
+
+/* ─── TEAM CARD ─── */
+.team-card{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;
+  cursor:pointer;transition:all 0.25s;
+}
+.team-card:hover{border-color:var(--green-dim);transform:translateY(-3px);box-shadow:0 8px 32px rgba(34,197,94,0.07);}
+.team-card-header{display:flex;align-items:center;gap:12px;padding:1.1rem;border-bottom:1px solid var(--border);}
+.team-logo-circle{
+  width:48px;height:48px;border-radius:50%;
+  background:var(--card2);border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--green);
+  flex-shrink:0;overflow:hidden;
+}
+.team-logo-circle img{width:100%;height:100%;object-fit:cover;}
+.team-name-col h3{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:700;color:var(--text);}
+.team-abbr-tag{font-family:'Bebas Neue',sans-serif;font-size:0.8rem;color:var(--green);letter-spacing:1.5px;}
+.team-card-body{padding:0.9rem 1.1rem;}
+.team-meta{display:flex;gap:0.75rem;flex-wrap:wrap;}
+.team-meta-item{font-size:0.75rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;letter-spacing:0.5px;}
+.team-meta-item strong{color:var(--text2);}
+
+/* ─── STATUS PILLS ─── */
+.pill{display:inline-flex;align-items:center;gap:4px;font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 7px;border-radius:2px;}
+.pill-official{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(245,158,11,0.25);}
+.pill-pending{background:var(--green-glow2);color:var(--green);border:1px solid var(--border);}
+.pill-danger{background:var(--danger-dim);color:var(--danger);border:1px solid rgba(239,68,68,0.25);}
+.pill-blue{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(59,130,246,0.25);}
+.pill-purple{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(168,85,247,0.25);}
+
+/* ─── ROLE CHIPS ─── */
+.role-chip{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 7px;border-radius:2px;}
+.rc-captain{background:var(--gold-dim);color:var(--gold);}
+.rc-cocap{background:var(--blue-dim);color:var(--blue);}
+.rc-member{background:var(--green-glow2);color:var(--green);}
+.rc-owner{background:var(--purple-dim);color:var(--purple);}
+.rc-free{background:rgba(107,158,107,0.1);color:var(--muted);}
+
+/* ─── FORMS ─── */
+.form-group{margin-bottom:1.1rem;}
+.form-label{display:block;margin-bottom:0.35rem;font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.form-input,.form-select,.form-textarea{
+  width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:4px;
+  padding:0.6rem 0.8rem;color:var(--text);font-family:'Barlow',sans-serif;font-size:0.88rem;
+  transition:border-color 0.2s,box-shadow 0.2s;outline:none;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(34,197,94,0.08);}
+.form-textarea{resize:vertical;min-height:80px;}
+.form-select option{background:#0a140a;}
+.form-hint{margin-top:0.25rem;font-size:0.72rem;color:var(--muted);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;}
+
+/* ─── SEARCH BAR ─── */
+.search-overlay{
+  position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);
+  display:none;align-items:flex-start;justify-content:center;padding-top:15vh;
+}
+.search-overlay.open{display:flex;}
+.search-box{background:var(--card);border:1px solid var(--border);border-radius:10px;width:100%;max-width:600px;overflow:hidden;}
+.search-input-wrap{display:flex;align-items:center;gap:10px;padding:1rem 1.25rem;border-bottom:1px solid var(--border);}
+.search-input-wrap svg{color:var(--muted);flex-shrink:0;}
+.search-main-input{
+  flex:1;background:none;border:none;outline:none;color:var(--text);
+  font-family:'Barlow',sans-serif;font-size:1rem;
+}
+.search-main-input::placeholder{color:var(--muted2);}
+.search-close-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.2rem;transition:color 0.2s;}
+.search-close-btn:hover{color:var(--text);}
+.search-results{max-height:400px;overflow-y:auto;padding:0.5rem;}
+.search-result-item{
+  display:flex;align-items:center;gap:12px;padding:0.75rem 0.85rem;border-radius:6px;
+  cursor:pointer;transition:background 0.15s;
+}
+.search-result-item:hover{background:rgba(34,197,94,0.06);}
+.search-result-icon{width:36px;height:36px;border-radius:50%;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--green);overflow:hidden;flex-shrink:0;}
+.search-result-icon img{width:100%;height:100%;object-fit:cover;}
+.search-result-name{font-weight:600;font-size:0.9rem;}
+.search-result-sub{font-size:0.75rem;color:var(--muted);}
+.search-hint{padding:1.5rem;text-align:center;color:var(--muted);font-size:0.85rem;}
+.search-section-label{padding:0.5rem 0.85rem 0.25rem;font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);}
+
+/* ─── MODALS ─── */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:1rem;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:10px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;animation:slideUp 0.3s ease;}
+.modal-lg{max-width:680px;}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;border-bottom:1px solid var(--border);}
+.modal-header h3{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;color:var(--green);}
+.modal-close{background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;transition:color 0.2s;line-height:1;}
+.modal-close:hover{color:var(--text);}
+.modal-body{padding:1.4rem;}
+.modal-footer{padding:1rem 1.4rem;border-top:1px solid var(--border);display:flex;gap:0.65rem;justify-content:flex-end;}
+
+/* ─── ALERTS ─── */
+.alert{padding:0.7rem 0.9rem;border-radius:4px;margin-bottom:0.9rem;font-size:0.84rem;display:flex;gap:7px;align-items:flex-start;line-height:1.4;}
+.alert-success{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.25);color:#86efac;}
+.alert-error{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);color:#fca5a5;}
+.alert-info{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);color:#93c5fd;}
+.alert-warn{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);color:#fcd34d;}
+
+/* ─── TABS ─── */
+.tabs{display:flex;gap:2px;margin-bottom:1.4rem;border-bottom:1px solid var(--border);}
+.tab-btn{
+  background:none;border:none;border-bottom:2px solid transparent;
+  color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:0.88rem;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;padding:0.55rem 0.95rem;cursor:pointer;transition:all 0.2s;margin-bottom:-1px;
+}
+.tab-btn.active{color:var(--green);border-bottom-color:var(--green);}
+.tab-btn:hover:not(.active){color:var(--text2);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ─── DASHBOARD LAYOUT ─── */
+.dash-layout{display:grid;grid-template-columns:220px 1fr;gap:1.25rem;align-items:start;}
+@media(max-width:768px){.dash-layout{grid-template-columns:1fr;}}
+.sidebar{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;position:sticky;top:76px;}
+.sidebar-profile{padding:1rem 1.1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;}
+.sidebar-profile img{width:38px;height:38px;border-radius:50%;border:2px solid var(--green);object-fit:cover;}
+.sidebar-profile-name{font-weight:600;font-size:0.88rem;line-height:1.2;}
+.sidebar-section{padding:0.5rem 1rem 0.2rem;font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);font-family:'Barlow Condensed',sans-serif;}
+.sidebar-item{
+  display:flex;align-items:center;gap:9px;padding:0.75rem 1.1rem;border-left:3px solid transparent;
+  cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:0.9rem;font-weight:600;color:var(--muted);
+  transition:all 0.2s;background:none;border-right:none;border-top:none;border-bottom:none;width:100%;text-align:left;
+}
+.sidebar-item:hover{color:var(--text2);background:rgba(34,197,94,0.04);border-left-color:var(--border);}
+.sidebar-item.active{color:var(--green);background:rgba(34,197,94,0.06);border-left-color:var(--green);}
+.sidebar-item .si-icon{width:16px;text-align:center;font-size:0.95rem;}
+
+/* ─── ROSTER ROWS ─── */
+.roster-row{display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid rgba(34,197,94,0.06);}
+.roster-row:last-child{border-bottom:none;}
+.roster-user{display:flex;align-items:center;gap:9px;}
+.roster-avatar{width:32px;height:32px;border-radius:50%;background:var(--card2);border:1px solid var(--border);object-fit:cover;}
+.roster-name{font-size:0.88rem;font-weight:500;}
+
+/* ─── SCRIM CARDS ─── */
+.scrim-card{
+  background:var(--card2);border:1px solid var(--border);border-radius:6px;
+  padding:0.9rem 1.1rem;margin-bottom:0.65rem;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;
+}
+.scrim-vs{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--text);letter-spacing:2px;}
+.scrim-vs em{color:var(--green);font-style:normal;}
+.scrim-meta{font-size:0.75rem;color:var(--muted);margin-top:1px;}
+.scrim-actions{display:flex;gap:0.4rem;align-items:center;}
+
+/* ─── OWNER STATS ─── */
+.owner-stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem;}
+.owner-stat-card{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:1.1rem;}
+.owner-stat-num{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--green);}
+.owner-stat-lbl{font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+
+/* ─── SEASON BANNER ─── */
+.season-banner{
+  background:linear-gradient(135deg,rgba(245,158,11,0.08) 0%,rgba(34,197,94,0.06) 100%);
+  border:1px solid rgba(245,158,11,0.2);border-radius:8px;
+  padding:1rem 1.25rem;margin-bottom:1.5rem;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;
+}
+.season-banner-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold);letter-spacing:2px;}
+.season-banner-meta{font-size:0.8rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;letter-spacing:0.5px;}
+
+/* ─── UPLOAD ZONE ─── */
+.upload-zone{
+  border:2px dashed var(--border);border-radius:8px;padding:1.5rem;text-align:center;
+  cursor:pointer;transition:all 0.2s;background:rgba(0,0,0,0.2);
+}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--green);background:rgba(34,197,94,0.04);}
+.upload-zone input[type=file]{display:none;}
+.upload-preview{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--green);margin:0 auto 0.5rem;display:block;}
+.upload-icon{font-size:2rem;margin-bottom:0.5rem;color:var(--muted);}
+.upload-text{font-size:0.8rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;letter-spacing:0.5px;}
+
+/* ─── MISC ─── */
+.divider{height:1px;background:var(--border);margin:1.25rem 0;}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-state{text-align:center;padding:3rem;color:var(--muted);font-size:0.9rem;}
+.empty-state{text-align:center;padding:3rem;color:var(--muted);}
+.empty-state h3{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--muted);letter-spacing:2px;margin-bottom:0.5rem;}
+.login-wall{text-align:center;padding:4rem 1rem;}
+.login-wall h2{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--green);letter-spacing:3px;margin-bottom:0.75rem;}
+.login-wall p{color:var(--muted);margin-bottom:1.75rem;font-size:0.9rem;}
+.flex{display:flex;}.gap-1{gap:0.4rem;}.gap-2{gap:0.75rem;}.gap-3{gap:1rem;}
+.items-center{align-items:center;}.justify-between{justify-content:space-between;}
+.flex-wrap{flex-wrap:wrap;}.mt-1{margin-top:0.5rem;}.mt-2{margin-top:1rem;}.mt-3{margin-top:1.5rem;}
+.w-full{width:100%;}.text-center{text-align:center;}.text-muted{color:var(--muted);font-size:0.82rem;}
+.hidden{display:none!important;}
+.bold{font-weight:600;}.small{font-size:0.8rem;}
+
+/* ─── TOAST ─── */
+#toast-container{position:fixed;bottom:1.25rem;right:1.25rem;z-index:999;display:flex;flex-direction:column;gap:0.4rem;}
+.toast{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:0.65rem 1rem;font-size:0.84rem;max-width:300px;animation:toastIn 0.3s ease;display:flex;align-items:center;gap:7px;box-shadow:0 4px 20px rgba(0,0,0,0.4);}
+.toast.success{border-left:3px solid var(--green);}
+.toast.error{border-left:3px solid var(--danger);}
+.toast.info{border-left:3px solid var(--blue);}
+.toast.warn{border-left:3px solid var(--gold);}
+@keyframes toastIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+
+/* ─── TEAM DETAIL MODAL ─── */
+.detail-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;}
+.detail-logo{width:72px;height:72px;border-radius:50%;border:3px solid var(--green);overflow:hidden;background:var(--card2);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--green);flex-shrink:0;}
+.detail-logo img{width:100%;height:100%;object-fit:cover;}
+.detail-team-name{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--text);letter-spacing:2px;}
+.detail-abbr{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--green);letter-spacing:2px;}
+
+/* ─── FILTERS ROW ─── */
+.filters-row{display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;margin-bottom:1.25rem;}
+.filter-btn{background:rgba(34,197,94,0.05);border:1px solid var(--border);color:var(--muted);padding:0.3rem 0.75rem;border-radius:20px;font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
+.filter-btn.active,.filter-btn:hover{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.35);color:var(--green);}
+
+/* ─── SEASON STATUS ─── */
+.season-status-card{background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-bottom:1.5rem;}
+
+@media(max-width:600px){
+  .form-row,.form-row-3{grid-template-columns:1fr;}
+  nav{padding:0 1rem;}
+  .nav-links{display:none;}
+  .hero h1{font-size:3.5rem;}
+  .hero-stats{gap:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">
+    <img src="ChatGPT_Image_May_1__2026__08_17_29_PM.png" alt="GTL" onerror="this.style.display='none'"/>
+    GTL <span>League</span>
+  </div>
+  <div class="nav-links">
+    <button class="nav-btn active" id="nav-home" onclick="showPage('home')">Home</button>
+    <button class="nav-btn" id="nav-teams" onclick="showPage('teams')">Teams</button>
+    <button class="nav-btn" id="nav-scrims" onclick="showPage('scrims')">Scrims</button>
+    <button class="nav-btn" id="nav-season" onclick="showPage('season')">Season</button>
+    <button class="nav-btn" id="nav-dashboard" onclick="showPage('dashboard')">Dashboard</button>
+  </div>
+  <div class="nav-right">
+    <button class="search-toggle" onclick="openSearch()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Search
+    </button>
+    <div id="nav-user-area"></div>
+  </div>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ═══ SEARCH OVERLAY ═══ -->
+<div class="search-overlay" id="search-overlay">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="search-main-input" id="search-input" placeholder="Search teams or players…" oninput="runSearch(this.value)" autocomplete="off"/>
+      <button class="search-close-btn" onclick="closeSearch()">✕</button>
+    </div>
+    <div id="search-results"><div class="search-hint">Type to search teams and players</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ HOME PAGE ═══════════════════════════════ -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <img src="ChatGPT_Image_May_1__2026__08_17_29_PM.png" class="hero-logo" alt="GTL" onerror="this.style.display='none'"/>
+    <h1>GORILLA TAG<br>LEAGUE</h1>
+    <p class="hero-sub">Community League — Season 1</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num" id="stat-teams">—</div><div class="stat-label">Teams</div></div>
+      <div class="stat"><div class="stat-num" id="stat-official">—</div><div class="stat-label">Official</div></div>
+      <div class="stat"><div class="stat-num" id="stat-players">—</div><div class="stat-label">Players</div></div>
+      <div class="stat"><div class="stat-num" id="stat-scrims">—</div><div class="stat-label">Scrims</div></div>
+    </div>
+    <div id="home-season-info" class="hidden" style="margin-bottom:1.75rem;padding:0.75rem 1.5rem;background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.2);border-radius:6px;text-align:center;">
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--gold);letter-spacing:2px;" id="home-season-name">—</span>
+      <span id="home-season-status" class="pill pill-official" style="margin-left:0.5rem;"></span>
+    </div>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="showPage('teams')">View Teams</button>
+      <button class="btn btn-outline" onclick="showPage('scrims')">Scrims</button>
+      <button class="btn btn-ghost" onclick="openCreateTeam()">+ Create Team</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ TEAMS PAGE ═══════════════════════════════ -->
+<div id="page-teams" class="page">
+  <div class="container">
+    <div class="section-header">
+      <h2>TEAMS</h2>
+      <div class="line"></div>
+      <button class="btn btn-primary btn-sm" onclick="openCreateTeam()" id="create-team-btn">+ Create Team</button>
+    </div>
+    <div class="filters-row">
+      <button class="filter-btn active" onclick="filterTeams('all',this)">All</button>
+      <button class="filter-btn" onclick="filterTeams('official',this)">Official</button>
+      <button class="filter-btn" onclick="filterTeams('pending',this)">Pending</button>
+    </div>
+    <div class="card-grid" id="teams-grid">
+      <div class="loading-state"><div class="spinner"></div><br>Loading teams…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SCRIMS PAGE ═══════════════════════════════ -->
+<div id="page-scrims" class="page">
+  <div class="container">
+    <div class="section-header">
+      <h2>SCRIMS</h2>
+      <div class="line"></div>
+      <button class="btn btn-primary btn-sm hidden" id="scrim-schedule-btn" onclick="openScrimModal()">+ Schedule Scrim</button>
+    </div>
+    <div id="scrims-login-wall" class="login-wall hidden">
+      <h2>MEMBERS ONLY</h2>
+      <p>You need to be logged in and on a team to view or schedule scrims.</p>
+      <button class="btn btn-discord" onclick="loginWithDiscord()">
+        <svg width="16" height="12" viewBox="0 0 127 96" fill="currentColor"><path d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83A97.68 97.68 0 0 0 49 6.83 72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15zM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69z"/></svg>
+        Login with Discord
+      </button>
+    </div>
+    <div id="scrims-no-team" class="login-wall hidden">
+      <h2>JOIN A TEAM</h2>
+      <p>You need to be on a team to view and schedule scrims.</p>
+      <button class="btn btn-primary" onclick="showPage('teams')">Browse Teams</button>
+    </div>
+    <div id="scrims-content" class="hidden">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('scrims','open',this)">Open Requests</button>
+        <button class="tab-btn" onclick="switchTab('scrims','scheduled',this)">Scheduled</button>
+        <button class="tab-btn" onclick="switchTab('scrims','mine',this)">My Team</button>
+      </div>
+      <div id="scrims-tab-open" class="tab-panel active"><div id="scrim-open-list"></div></div>
+      <div id="scrims-tab-scheduled" class="tab-panel"><div id="scrim-scheduled-list"></div></div>
+      <div id="scrims-tab-mine" class="tab-panel"><div id="scrim-mine-list"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SEASON PAGE ═══════════════════════════════ -->
+<div id="page-season" class="page">
+  <div class="container">
+    <div class="section-header">
+      <h2>SEASON</h2>
+      <div class="line"></div>
+    </div>
+    <div id="season-content"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ DASHBOARD ═══════════════════════════════ -->
+<div id="page-dashboard" class="page">
+  <div class="container">
+    <div id="dash-login-wall" class="login-wall hidden">
+      <h2>LOGIN REQUIRED</h2>
+      <p>Sign in with Discord to access your dashboard.</p>
+      <button class="btn btn-discord" onclick="loginWithDiscord()">
+        <svg width="16" height="12" viewBox="0 0 127 96" fill="currentColor"><path d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83A97.68 97.68 0 0 0 49 6.83 72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15zM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69z"/></svg>
+        Login with Discord
+      </button>
+    </div>
+    <div id="dash-content" class="hidden">
+      <div class="dash-layout">
+        <aside class="sidebar">
+          <div class="sidebar-profile">
+            <img id="sb-avatar" src="" alt="" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"/>
+            <div>
+              <div class="sidebar-profile-name" id="sb-name">—</div>
+              <div id="sb-role-chip" class="role-chip rc-free" style="margin-top:3px;font-size:0.58rem;">Free Agent</div>
+            </div>
+          </div>
+          <div class="sidebar-section">General</div>
+          <button class="sidebar-item active" onclick="showDashTab('overview',this)"><span class="si-icon">◈</span> Overview</button>
+          <button class="sidebar-item" onclick="showDashTab('myteam',this)"><span class="si-icon">◉</span> My Team</button>
+          <button class="sidebar-item" onclick="showDashTab('dash-scrims',this)"><span class="si-icon">⚔</span> Scrims</button>
+          <div id="sb-captain-section" class="hidden">
+            <div class="sidebar-section">Captain Tools</div>
+            <button class="sidebar-item" id="sb-invite-btn" onclick="showDashTab('invite',this)"><span class="si-icon">✉</span> Invite Player</button>
+            <button class="sidebar-item" id="sb-editteam-btn" onclick="showDashTab('editteam',this)"><span class="si-icon">✎</span> Edit Team</button>
+          </div>
+          <div id="sb-owner-section" class="hidden">
+            <div class="sidebar-section">Owner Tools</div>
+            <button class="sidebar-item" id="sb-owner-btn" onclick="showDashTab('owner',this)"><span class="si-icon">★</span> Owner Panel</button>
+          </div>
+        </aside>
+        <main id="dash-main">
+          <!-- Overview -->
+          <div id="dash-overview" class="tab-panel active">
+            <div class="section-header" style="margin-bottom:1.5rem"><h2>OVERVIEW</h2><div class="line"></div></div>
+            <div id="ov-no-team" class="card text-center" style="padding:2.5rem">
+              <p class="text-muted" style="margin-bottom:1rem">You're not on a team yet.</p>
+              <div class="flex gap-2" style="justify-content:center;flex-wrap:wrap;">
+                <button class="btn btn-primary" onclick="showPage('teams')">Browse Teams</button>
+                <button class="btn btn-outline" onclick="openCreateTeam()">Create Team</button>
+              </div>
+            </div>
+            <div id="ov-team-info" class="hidden"></div>
+          </div>
+          <!-- My Team -->
+          <div id="dash-myteam" class="tab-panel">
+            <div class="section-header" style="margin-bottom:1.5rem"><h2>MY TEAM</h2><div class="line"></div></div>
+            <div id="myteam-content"></div>
+          </div>
+          <!-- Scrims -->
+          <div id="dash-dash-scrims" class="tab-panel">
+            <div class="section-header" style="margin-bottom:1.5rem">
+              <h2>SCRIMS</h2><div class="line"></div>
+              <button class="btn btn-primary btn-sm" onclick="openScrimModal()">+ Schedule</button>
+            </div>
+            <div id="dash-scrims-content"></div>
+          </div>
+          <!-- Invite -->
+          <div id="dash-invite" class="tab-panel">
+            <div class="section-header" style="margin-bottom:1.5rem"><h2>INVITE PLAYER</h2><div class="line"></div></div>
+            <div class="card" style="max-width:460px">
+              <div class="form-group">
+                <label class="form-label">Discord User ID</label>
+                <input class="form-input" id="invite-userid" placeholder="e.g. 779805628804890644"/>
+                <div class="form-hint">Player must be in the GTL Discord server.</div>
+              </div>
+              <button class="btn btn-primary w-full" onclick="sendInvite()">Send Invite via Bot</button>
+              <div id="invite-result" class="mt-2"></div>
+            </div>
+          </div>
+          <!-- Edit Team -->
+          <div id="dash-editteam" class="tab-panel">
+            <div class="section-header" style="margin-bottom:1.5rem"><h2>EDIT TEAM</h2><div class="line"></div></div>
+            <div class="card" style="max-width:520px">
+              <div class="text-center" style="margin-bottom:1.5rem">
+                <div class="upload-zone" onclick="document.getElementById('logo-upload').click()" id="logo-upload-zone">
+                  <img id="logo-preview" class="upload-preview hidden" src="" alt="Logo preview"/>
+                  <div id="logo-upload-placeholder">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-text">Click or drag & drop team logo (optional)</div>
+                    <div class="text-muted" style="font-size:0.7rem;margin-top:4px">PNG, JPG, GIF — or paste a URL below</div>
+                  </div>
+                </div>
+                <input type="file" id="logo-upload" accept="image/*" onchange="handleLogoUpload(this)"/>
+              </div>
+              <div class="form-group"><label class="form-label">Team Name</label><input class="form-input" id="edit-name" placeholder="Team Name"/></div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Abbreviation (max 6)</label><input class="form-input" id="edit-abbr" maxlength="6"/></div>
+              </div>
+              <div class="form-group"><label class="form-label">Logo URL (or paste after upload)</label><input class="form-input" id="edit-logo" placeholder="https://i.imgur.com/..." oninput="previewLogoUrl(this.value)"/></div>
+              <div class="form-group"><label class="form-label">Team Discord Invite</label><input class="form-input" id="edit-discord" placeholder="https://discord.gg/..."/></div>
+              <button class="btn btn-primary w-full" onclick="saveTeamEdit()">Save Changes</button>
+              <div id="edit-team-result" class="mt-2"></div>
+            </div>
+          </div>
+          <!-- Owner Panel -->
+          <div id="dash-owner" class="tab-panel">
+            <div class="section-header" style="margin-bottom:1.5rem">
+              <h2>OWNER PANEL</h2><div class="line"></div><span class="badge badge-purple">★ Owner</span>
+            </div>
+            <div class="owner-stat-grid" id="owner-stat-grid"></div>
+            <div class="tabs">
+              <button class="tab-btn active" onclick="switchTab('owner','teams',this)">Teams</button>
+              <button class="tab-btn" onclick="switchTab('owner','suspensions',this)">Suspensions</button>
+              <button class="tab-btn" onclick="switchTab('owner','announce',this)">Announce</button>
+            </div>
+            <div id="owner-tab-teams" class="tab-panel active"><div id="owner-teams-list"></div></div>
+            <div id="owner-tab-suspensions" class="tab-panel">
+              <div class="card"><div id="owner-susp-list"><div class="text-muted">Loading…</div></div></div>
+            </div>
+            <div id="owner-tab-announce" class="tab-panel">
+              <div class="card" style="max-width:500px">
+                <div class="form-group"><label class="form-label">Announcement</label><textarea class="form-textarea" id="announce-msg" rows="4" placeholder="Type your announcement…"></textarea></div>
+                <div class="form-group">
+                  <label class="form-label">Channel</label>
+                  <select class="form-select" id="announce-ch">
+                    <option value="transactions">Transactions</option>
+                    <option value="new-teams">New Teams</option>
+                  </select>
+                </div>
+                <button class="btn btn-primary w-full" onclick="sendAnnouncement()">Send Announcement</button>
+                <div id="announce-result" class="mt-2"></div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODALS ═══ -->
+
+<!-- Create Team -->
+<div class="modal-overlay" id="modal-create-team">
+  <div class="modal">
+    <div class="modal-header"><h3>CREATE TEAM</h3><button class="modal-close" onclick="closeModal('modal-create-team')">✕</button></div>
+    <div class="modal-body">
+      <div id="ct-alert"></div>
+      <div class="text-center" style="margin-bottom:1.25rem">
+        <div class="upload-zone" onclick="document.getElementById('ct-logo-file').click()" id="ct-upload-zone">
+          <img id="ct-logo-preview" class="upload-preview hidden" src="" alt=""/>
+          <div id="ct-upload-placeholder">
+            <div class="upload-icon">🦍</div>
+            <div class="upload-text">Drag & drop team logo (optional)</div>
+            <div class="text-muted" style="font-size:0.7rem;margin-top:3px">Or paste a URL below</div>
+          </div>
+        </div>
+        <input type="file" id="ct-logo-file" accept="image/*" onchange="handleCtLogoUpload(this)"/>
+      </div>
+      <div class="form-group"><label class="form-label">Team Name *</label><input class="form-input" id="ct-name" placeholder="e.g. The Gorilla Kings" maxlength="32"/></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Abbreviation *</label><input class="form-input" id="ct-abbr" placeholder="TGK" maxlength="6" oninput="this.value=this.value.toUpperCase()"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Logo URL (optional)</label><input class="form-input" id="ct-logo-url" placeholder="https://i.imgur.com/yourlogo.png" oninput="previewCtLogoUrl(this.value)"/></div>
+      <div class="form-group"><label class="form-label">Team Discord Invite (optional)</label><input class="form-input" id="ct-discord" placeholder="https://discord.gg/yourserver"/></div>
+      <div class="alert alert-info" style="font-size:0.78rem">ℹ️ Creating a team auto-assigns <strong>Team Member</strong> and <strong>Captain</strong> roles in Discord.</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-create-team')">Cancel</button>
+      <button class="btn btn-primary" id="ct-submit" onclick="submitCreateTeam()">Create Team</button>
+    </div>
+  </div>
+</div>
+
+<!-- Team Detail -->
+<div class="modal-overlay" id="modal-team-detail">
+  <div class="modal modal-lg">
+    <div class="modal-header"><h3 id="td-title">TEAM</h3><button class="modal-close" onclick="closeModal('modal-team-detail')">✕</button></div>
+    <div class="modal-body" id="td-body"></div>
+    <div class="modal-footer" id="td-footer"></div>
+  </div>
+</div>
+
+<!-- Schedule Scrim -->
+<div class="modal-overlay" id="modal-scrim">
+  <div class="modal">
+    <div class="modal-header"><h3>SCHEDULE SCRIM</h3><button class="modal-close" onclick="closeModal('modal-scrim')">✕</button></div>
+    <div class="modal-body">
+      <div id="scrim-alert"></div>
+      <div class="form-group">
+        <label class="form-label">Opponent (leave blank = open request)</label>
+        <select class="form-select" id="scrim-opp"><option value="">— Open Request —</option></select>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Date *</label><input class="form-input" type="date" id="scrim-date"/></div>
+        <div class="form-group"><label class="form-label">Time *</label><input class="form-input" type="time" id="scrim-time"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="scrim-notes" placeholder="Format, map, etc." rows="3"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-scrim')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitScrim()">Schedule</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  CONFIG — UPDATE THESE
+// ══════════════════════════════════════════════
+const CONFIG = {
+  DISCORD_CLIENT_ID: 'YOUR_DISCORD_CLIENT_ID',
+  REDIRECT_URI: window.location.origin + window.location.pathname,
+  API_BASE: 'https://gtl-website-production.up.railway.app',
+  OWNER_ID: '779805628804890644',
+  // Role IDs that can access scrims
+  TEAM_MEMBER_ROLE_ID: '1218334966341959750',
+  SEASON_MANAGER_ROLE_ID: '1102378245216813127',
+};
+
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+const S = {
+  user: null,
+  teams: {},
+  scrims: [],
+  suspensions: {players:{},teams:{}},
+  season: null,
+  myTeamName: null,
+  myTeamRole: null,
+  ctLogoBase64: null,
+  editLogoBase64: null,
+};
+
+// ══════════════════════════════════════════════
+//  DISCORD OAUTH
+// ══════════════════════════════════════════════
+function loginWithDiscord() {
+  const p = new URLSearchParams({
+    client_id: CONFIG.DISCORD_CLIENT_ID,
+    redirect_uri: CONFIG.REDIRECT_URI,
+    response_type: 'token',
+    scope: 'identify',
+  });
+  window.location.href = `https://discord.com/api/oauth2/authorize?${p}`;
+}
+
+async function handleOAuth() {
+  const hash = window.location.hash.substring(1);
+  const p = new URLSearchParams(hash);
+  const token = p.get('access_token');
+  if (!token) return;
+  history.replaceState(null, '', window.location.pathname);
+  try {
+    const res = await fetch('https://discord.com/api/users/@me', {headers:{Authorization:`Bearer ${token}`}});
+    const user = await res.json();
+    localStorage.setItem('gtl_user', JSON.stringify(user));
+    localStorage.setItem('gtl_token', token);
+    S.user = user;
+    onLogin();
+    toast(`Welcome, ${user.username}!`, 'success');
+  } catch(e) { toast('Login failed.', 'error'); }
+}
+
+function logout() {
+  localStorage.removeItem('gtl_user');
+  localStorage.removeItem('gtl_token');
+  S.user = null; S.myTeamName = null; S.myTeamRole = null;
+  renderNav(); showPage('home'); toast('Logged out.', 'info');
+}
+
+function onLogin() { renderNav(); computeMyTeam(); refreshStats(); }
+
+function avatarUrl(user) {
+  if (!user) return 'https://cdn.discordapp.com/embed/avatars/0.png';
+  return user.avatar
+    ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+    : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.id) % 5}.png`;
+}
+
+function renderNav() {
+  const area = document.getElementById('nav-user-area');
+  if (!S.user) {
+    area.innerHTML = `<button class="btn btn-discord btn-sm" onclick="loginWithDiscord()">
+      <svg width="14" height="11" viewBox="0 0 127 96" fill="currentColor"><path d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83A97.68 97.68 0 0 0 49 6.83 72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15zM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69z"/></svg>
+      Login</button>`;
+  } else {
+    area.innerHTML = `
+      <img src="${avatarUrl(S.user)}" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--green);" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"/>
+      <span style="font-size:0.8rem;color:var(--muted)">${S.user.username}</span>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>`;
+  }
+}
+
+// ══════════════════════════════════════════════
+//  API
+// ══════════════════════════════════════════════
+async function api(path, method='GET', body=null) {
+  const opts = { method, headers: {'Content-Type':'application/json','X-User-Id': S.user?.id || ''} };
+  if (body) opts.body = JSON.stringify(body);
+  try {
+    const res = await fetch(CONFIG.API_BASE + path, opts);
+    return await res.json();
+  } catch(e) {
+    return {error:'Cannot connect to GTL API.'};
+  }
+}
+
+async function loadAll() {
+  const [teams, scrims, suspensions, season] = await Promise.all([
+    api('/teams'), api('/scrims'), api('/suspensions'), api('/season/current')
+  ]);
+  if (!teams.error) S.teams = teams;
+  if (!scrims.error) S.scrims = Array.isArray(scrims) ? scrims : [];
+  if (!suspensions.error) S.suspensions = suspensions;
+  if (!season.error) S.season = season;
+  computeMyTeam();
+  refreshStats();
+}
+
+// ══════════════════════════════════════════════
+//  COMPUTED STATE
+// ══════════════════════════════════════════════
+function computeMyTeam() {
+  if (!S.user) { S.myTeamName = null; S.myTeamRole = null; return; }
+  const uid = parseInt(S.user.id);
+  for (const [name, team] of Object.entries(S.teams)) {
+    if (team.members.includes(uid)) {
+      S.myTeamName = name;
+      if (team.captain === uid) S.myTeamRole = 'captain';
+      else if (team.co_captain === uid) S.myTeamRole = 'co_captain';
+      else S.myTeamRole = 'member';
+      return;
+    }
+  }
+  S.myTeamName = null; S.myTeamRole = null;
+}
+
+function isOwner() { return S.user?.id === CONFIG.OWNER_ID; }
+function isCaptainOrCo() { return ['captain','co_captain'].includes(S.myTeamRole); }
+function canAccessScrims() { return S.user && S.myTeamName; }
+
+function refreshStats() {
+  const teams = Object.values(S.teams);
+  document.getElementById('stat-teams').textContent = teams.length || '0';
+  document.getElementById('stat-official').textContent = teams.filter(t=>t.official).length || '0';
+  document.getElementById('stat-players').textContent = teams.reduce((a,t)=>a+t.members.length,0) || '0';
+  document.getElementById('stat-scrims').textContent = S.scrims.length || '0';
+  // Season on home
+  if (S.season) {
+    document.getElementById('home-season-info').classList.remove('hidden');
+    document.getElementById('home-season-name').textContent = S.season.name || 'Season';
+    const sb = document.getElementById('home-season-status');
+    sb.textContent = (S.season.status || '').toUpperCase();
+    sb.className = 'pill ' + (S.season.status==='active' ? 'pill-official' : 'pill-blue');
+  }
+}
+
+// ══════════════════════════════════════════════
+//  PAGE ROUTING
+// ══════════════════════════════════════════════
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const nb = document.getElementById('nav-'+page);
+  if (nb) nb.classList.add('active');
+  window.scrollTo(0,0);
+  if (page==='teams') renderTeamsPage();
+  if (page==='scrims') renderScrimsPage();
+  if (page==='season') renderSeasonPage();
+  if (page==='dashboard') renderDashboard();
+}
+
+// ══════════════════════════════════════════════
+//  TEAMS PAGE
+// ══════════════════════════════════════════════
+let teamFilter = 'all';
+
+function filterTeams(f, btn) {
+  teamFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTeamsGrid();
+}
+
+async function renderTeamsPage() {
+  await loadAll();
+  renderTeamsGrid();
+  const btn = document.getElementById('create-team-btn');
+  btn.style.display = (S.user && !S.myTeamName) ? '' : 'none';
+}
+
+function renderTeamsGrid() {
+  const grid = document.getElementById('teams-grid');
+  let entries = Object.entries(S.teams);
+  if (teamFilter==='official') entries = entries.filter(([,t])=>t.official);
+  if (teamFilter==='pending') entries = entries.filter(([,t])=>!t.official);
+  if (!entries.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><h3>NO TEAMS</h3><p>No teams found for this filter.</p></div>`;
+    return;
+  }
+  grid.innerHTML = entries.map(([name,team])=>{
+    const abbr = team.abbreviation || '?';
+    const logo = team.logo_url
+      ? `<img src="${team.logo_url}" onerror="this.parentElement.textContent='${abbr}'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+      : abbr;
+    const status = team.official
+      ? '<span class="pill pill-official">★ Official</span>'
+      : '<span class="pill pill-pending">Pending</span>';
+    const captain = team.captain;
+    return `<div class="team-card" onclick="openTeamDetail('${esc(name)}')">
+      <div class="team-card-header">
+        <div class="team-logo-circle">${logo}</div>
+        <div class="team-name-col">
+          <h3>${name}</h3>
+          <div class="team-abbr-tag">[${abbr}]</div>
+        </div>
+        <div style="margin-left:auto">${status}</div>
+      </div>
+      <div class="team-card-body">
+        <div class="team-meta">
+          <div class="team-meta-item">Roster <strong>${team.members.length}/25</strong></div>
+          <div class="team-meta-item">Captain <strong><@${captain}></strong></div>
+          ${team.team_discord ? `<div class="team-meta-item"><a href="${team.team_discord}" target="_blank" style="color:var(--green)" onclick="event.stopPropagation()">Discord ↗</a></div>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openTeamDetail(name) {
+  const team = S.teams[name];
+  if (!team) return;
+  const abbr = team.abbreviation || '?';
+  document.getElementById('td-title').textContent = `${name} [${abbr}]`;
+  const logo = team.logo_url
+    ? `<img src="${team.logo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.parentElement.textContent='${abbr}'">`
+    : abbr;
+  const status = team.official
+    ? '<span class="pill pill-official">★ Official GTL Team</span>'
+    : '<span class="pill pill-pending">Pending Approval</span>';
+  const susp = S.suspensions.teams?.[name];
+  const suspHtml = susp ? `<div class="alert alert-error" style="margin-top:0.75rem">⚠️ Team suspended: ${susp.reason}</div>` : '';
+  const rosterHtml = team.members.map(uid=>{
+    const role = uid===team.captain ? 'captain' : uid===team.co_captain ? 'co_captain' : 'member';
+    const roleChip = role==='captain' ? '<span class="role-chip rc-captain">Captain</span>' : role==='co_captain' ? '<span class="role-chip rc-cocap">Co-Cap</span>' : '<span class="role-chip rc-member">Member</span>';
+    const playerSusp = S.suspensions.players?.[String(uid)];
+    const suspTag = playerSusp ? '<span class="pill pill-danger" style="font-size:0.55rem">Suspended</span>' : '';
+    return `<div class="roster-row">
+      <div class="roster-user">
+        <img class="roster-avatar" src="https://cdn.discordapp.com/embed/avatars/${uid%5}.png" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"/>
+        <span class="roster-name">&lt;@${uid}&gt;</span>
+        ${suspTag}
+      </div>
+      <div class="flex gap-1 items-center">${roleChip}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('td-body').innerHTML = `
+    <div class="detail-header">
+      <div class="detail-logo">${logo}</div>
+      <div>
+        <div class="detail-team-name">${name}</div>
+        <div class="detail-abbr">[${abbr}]</div>
+        <div style="margin-top:4px">${status}</div>
+      </div>
+    </div>
+    ${suspHtml}
+    <div class="divider"></div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem">Roster (${team.members.length}/25)</div>
+    ${rosterHtml}
+    ${team.team_discord ? `<div class="divider"></div><a href="${team.team_discord}" target="_blank" class="btn btn-outline w-full" style="justify-content:center">Join Team Discord ↗</a>` : ''}
+  `;
+  let footer = '';
+  if (isOwner()) {
+    if (!team.official) footer += `<button class="btn btn-primary btn-sm" onclick="makeOfficial('${esc(name)}')">Make Official</button>`;
+    footer += `<button class="btn btn-danger btn-sm" onclick="ownerDisband('${esc(name)}')">Disband Team</button>`;
+  }
+  document.getElementById('td-footer').innerHTML = footer;
+  openModal('modal-team-detail');
+}
+
+// ══════════════════════════════════════════════
+//  CREATE TEAM
+// ══════════════════════════════════════════════
+function openCreateTeam() {
+  if (!S.user) { loginWithDiscord(); return; }
+  if (S.myTeamName) { toast('You are already on a team!','error'); return; }
+  document.getElementById('ct-alert').innerHTML = '';
+  document.getElementById('ct-name').value = '';
+  document.getElementById('ct-abbr').value = '';
+  document.getElementById('ct-logo-url').value = '';
+  document.getElementById('ct-discord').value = '';
+  S.ctLogoBase64 = null;
+  document.getElementById('ct-logo-preview').classList.add('hidden');
+  document.getElementById('ct-upload-placeholder').classList.remove('hidden');
+  openModal('modal-create-team');
+}
+
+function handleCtLogoUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    S.ctLogoBase64 = e.target.result;
+    document.getElementById('ct-logo-preview').src = e.target.result;
+    document.getElementById('ct-logo-preview').classList.remove('hidden');
+    document.getElementById('ct-upload-placeholder').classList.add('hidden');
+  };
+  reader.readAsDataURL(file);
+}
+
+function previewCtLogoUrl(url) {
+  if (!url) return;
+  const img = document.getElementById('ct-logo-preview');
+  img.src = url;
+  img.classList.remove('hidden');
+  document.getElementById('ct-upload-placeholder').classList.add('hidden');
+  S.ctLogoBase64 = null;
+}
+
+async function submitCreateTeam() {
+  const name = document.getElementById('ct-name').value.trim();
+  const abbr = document.getElementById('ct-abbr').value.trim().toUpperCase();
+  const logoUrl = document.getElementById('ct-logo-url').value.trim();
+  const disc = document.getElementById('ct-discord').value.trim();
+  const alertEl = document.getElementById('ct-alert');
+  if (!name || !abbr) { alertEl.innerHTML = `<div class="alert alert-error">Team name and abbreviation are required.</div>`; return; }
+  const btn = document.getElementById('ct-submit');
+  btn.disabled = true; btn.textContent = 'Creating…';
+  const res = await api('/teams/create','POST',{
+    name, abbreviation: abbr,
+    logo_url: S.ctLogoBase64 || logoUrl || null,
+    team_discord: disc || null,
+    captain_id: parseInt(S.user.id),
+    captain_username: S.user.username,
+  });
+  btn.disabled = false; btn.textContent = 'Create Team';
+  if (res.error) { alertEl.innerHTML = `<div class="alert alert-error">❌ ${res.error}</div>`; return; }
+  toast(`Team "${name}" created! Roles assigned in Discord.`, 'success');
+  closeModal('modal-create-team');
+  await loadAll(); renderTeamsGrid();
+}
+
+// ══════════════════════════════════════════════
+//  SCRIMS
+// ══════════════════════════════════════════════
+async function renderScrimsPage() {
+  await loadAll();
+  const canAccess = canAccessScrims();
+  document.getElementById('scrims-login-wall').classList.toggle('hidden', !(!S.user));
+  document.getElementById('scrims-no-team').classList.toggle('hidden', !(S.user && !S.myTeamName));
+  document.getElementById('scrims-content').classList.toggle('hidden', !canAccess);
+  document.getElementById('scrim-schedule-btn').classList.toggle('hidden', !canAccess);
+  if (canAccess) renderScrimLists();
+}
+
+function renderScrimLists() {
+  const open = S.scrims.filter(s=>!s.opponent&&s.status==='open');
+  const sched = S.scrims.filter(s=>s.opponent&&s.status==='scheduled');
+  const mine = S.scrims.filter(s=>s.team_a===S.myTeamName||s.team_b===S.myTeamName);
+  document.getElementById('scrim-open-list').innerHTML = open.length ? open.map(scrimCard).join('') : '<div class="empty-state"><h3>NO OPEN REQUESTS</h3><p>No open scrim requests right now.</p></div>';
+  document.getElementById('scrim-scheduled-list').innerHTML = sched.length ? sched.map(scrimCard).join('') : '<div class="empty-state"><h3>NONE SCHEDULED</h3></div>';
+  document.getElementById('scrim-mine-list').innerHTML = mine.length ? mine.map(scrimCard).join('') : '<div class="empty-state"><h3>NO SCRIMS YET</h3><p>Schedule your first scrim.</p></div>';
+}
+
+function scrimCard(s) {
+  const vs = s.opponent
+    ? `<div class="scrim-vs">${s.team_a} <em>VS</em> ${s.team_b||s.opponent}</div>`
+    : `<div class="scrim-vs">${s.team_a} <em>—</em> Open</div>`;
+  const date = s.date ? new Date(s.date).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) : '?';
+  const statusCls = s.status==='scheduled' ? 'pill-official' : 'pill-pending';
+  let actions = '';
+  if (!s.opponent && S.myTeamName && s.team_a!==S.myTeamName)
+    actions = `<button class="btn btn-primary btn-xs" onclick="acceptScrim('${s.id}')">Accept</button>`;
+  return `<div class="scrim-card">
+    <div>${vs}<div class="scrim-meta">${date} ${s.time||''}${s.notes?' · '+s.notes:''}</div></div>
+    <div class="scrim-actions"><span class="pill ${statusCls}">${s.status}</span>${actions}</div>
+  </div>`;
+}
+
+function openScrimModal() {
+  if (!S.user||!S.myTeamName) { toast('You need to be on a team.','error'); return; }
+  const sel = document.getElementById('scrim-opp');
+  sel.innerHTML = '<option value="">— Open Request —</option>';
+  Object.keys(S.teams).filter(n=>n!==S.myTeamName).forEach(n=>{ sel.innerHTML+=`<option value="${n}">${n}</option>`; });
+  document.getElementById('scrim-alert').innerHTML = '';
+  openModal('modal-scrim');
+}
+
+async function submitScrim() {
+  const opp = document.getElementById('scrim-opp').value;
+  const date = document.getElementById('scrim-date').value;
+  const time = document.getElementById('scrim-time').value;
+  const notes = document.getElementById('scrim-notes').value.trim();
+  if (!date||!time) { document.getElementById('scrim-alert').innerHTML=`<div class="alert alert-error">Date and time required.</div>`; return; }
+  const res = await api('/scrims/create','POST',{team_a:S.myTeamName,opponent:opp||null,date,time,notes,created_by:parseInt(S.user.id)});
+  if (res.error) { document.getElementById('scrim-alert').innerHTML=`<div class="alert alert-error">❌ ${res.error}</div>`; return; }
+  toast('Scrim scheduled!','success'); closeModal('modal-scrim');
+  await loadAll(); renderScrimLists();
+}
+
+async function acceptScrim(id) {
+  const res = await api('/scrims/accept','POST',{scrim_id:id,team_b:S.myTeamName,user_id:parseInt(S.user.id)});
+  if (res.error) { toast(res.error,'error'); return; }
+  toast('Scrim accepted!','success'); await loadAll(); renderScrimLists();
+}
+
+// ══════════════════════════════════════════════
+//  SEASON PAGE
+// ══════════════════════════════════════════════
+async function renderSeasonPage() {
+  await loadAll();
+  const container = document.getElementById('season-content');
+  if (!S.season) {
+    container.innerHTML = `<div class="empty-state"><h3>NO ACTIVE SEASON</h3><p>Check back when a new season is announced!</p></div>`;
+    return;
+  }
+  const s = S.season;
+  const statusClass = s.status==='active' ? 'pill-official' : s.status==='creating' ? 'pill-blue' : 'pill-pending';
+  const teamsHtml = (s.teams||[]).map(tname=>{
+    const team = S.teams[tname];
+    if (!team) return `<div class="team-card"><div class="team-card-header"><div class="team-name-col"><h3>${tname}</h3><div class="team-abbr-tag" style="color:var(--danger)">Team no longer exists</div></div></div></div>`;
+    const abbr = team.abbreviation||'?';
+    const logo = team.logo_url ? `<img src="${team.logo_url}" onerror="this.parentElement.textContent='${abbr}'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` : abbr;
+    return `<div class="team-card" onclick="openTeamDetail('${esc(tname)}')">
+      <div class="team-card-header">
+        <div class="team-logo-circle">${logo}</div>
+        <div class="team-name-col"><h3>${tname}</h3><div class="team-abbr-tag">[${abbr}]</div></div>
+        <span class="pill pill-official" style="margin-left:auto">★ Official</span>
+      </div>
+      <div class="team-card-body">
+        <div class="team-meta"><div class="team-meta-item">Roster <strong>${team.members.length}/25</strong></div></div>
+      </div>
+    </div>`;
+  }).join('');
+  container.innerHTML = `
+    <div class="season-banner">
+      <div>
+        <div class="season-banner-title">${s.name||'Current Season'}</div>
+        <div class="season-banner-meta">
+          <span class="pill ${statusClass}">${(s.status||'').toUpperCase()}</span>
+          <span style="margin-left:0.5rem">${(s.teams||[]).length} teams competing</span>
+        </div>
+      </div>
+    </div>
+    <div class="section-header" style="margin-top:1.5rem;margin-bottom:1rem"><h2>SEASON TEAMS</h2><div class="line"></div></div>
+    <div class="card-grid">${teamsHtml || '<div class="empty-state" style="grid-column:1/-1"><p>No teams added yet.</p></div>'}</div>
+  `;
+}
+
+// ══════════════════════════════════════════════
+//  SEARCH
+// ══════════════════════════════════════════════
+function openSearch() {
+  document.getElementById('search-overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('search-input').focus(), 50);
+}
+function closeSearch() {
+  document.getElementById('search-overlay').classList.remove('open');
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results').innerHTML = '<div class="search-hint">Type to search teams and players</div>';
+}
+document.getElementById('search-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('search-overlay')) closeSearch();
+});
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeSearch(); });
+
+function runSearch(q) {
+  const results = document.getElementById('search-results');
+  if (!q.trim()) { results.innerHTML = '<div class="search-hint">Type to search teams and players</div>'; return; }
+  const ql = q.toLowerCase();
+  // Search teams
+  const teamMatches = Object.entries(S.teams).filter(([name,team])=>
+    name.toLowerCase().includes(ql) || (team.abbreviation||'').toLowerCase().includes(ql)
+  );
+  // Search players (by user ID or mention string in members)
+  const playerMatches = [];
+  const seen = new Set();
+  Object.entries(S.teams).forEach(([teamName, team])=>{
+    team.members.forEach(uid=>{
+      const s = String(uid);
+      if (!seen.has(s) && s.includes(ql.replace('@',''))) {
+        seen.add(s);
+        playerMatches.push({uid, teamName, team});
+      }
+    });
+  });
+  let html = '';
+  if (teamMatches.length) {
+    html += `<div class="search-section-label">Teams</div>`;
+    html += teamMatches.map(([name,team])=>{
+      const abbr = team.abbreviation||'?';
+      const logo = team.logo_url ? `<img src="${team.logo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.parentElement.textContent='${abbr}'">` : abbr;
+      const status = team.official ? '★ Official' : 'Pending';
+      return `<div class="search-result-item" onclick="closeSearch();openTeamDetail('${esc(name)}')">
+        <div class="search-result-icon">${logo}</div>
+        <div><div class="search-result-name">${name} [${abbr}]</div><div class="search-result-sub">${team.members.length} members · ${status}</div></div>
+      </div>`;
+    }).join('');
+  }
+  if (playerMatches.length) {
+    html += `<div class="search-section-label">Players (by User ID)</div>`;
+    html += playerMatches.map(({uid,teamName,team})=>{
+      const role = uid===team.captain?'Captain':uid===team.co_captain?'Co-Captain':'Member';
+      return `<div class="search-result-item" onclick="closeSearch();openTeamDetail('${esc(teamName)}')">
+        <div class="search-result-icon"><img src="https://cdn.discordapp.com/embed/avatars/${uid%5}.png" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/></div>
+        <div><div class="search-result-name">&lt;@${uid}&gt;</div><div class="search-result-sub">${teamName} · ${role}</div></div>
+      </div>`;
+    }).join('');
+  }
+  if (!html) html = '<div class="search-hint">No results found for that search.</div>';
+  results.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════════
+async function renderDashboard() {
+  await loadAll();
+  if (!S.user) {
+    document.getElementById('dash-login-wall').classList.remove('hidden');
+    document.getElementById('dash-content').classList.add('hidden');
+    return;
+  }
+  document.getElementById('dash-login-wall').classList.add('hidden');
+  document.getElementById('dash-content').classList.remove('hidden');
+  // Sidebar
+  document.getElementById('sb-avatar').src = avatarUrl(S.user);
+  document.getElementById('sb-name').textContent = S.user.username;
+  const chip = document.getElementById('sb-role-chip');
+  if (isOwner()) {
+    chip.className='role-chip rc-owner';chip.textContent='★ Owner';
+    document.getElementById('sb-owner-section').classList.remove('hidden');
+  } else if (S.myTeamRole==='captain') {
+    chip.className='role-chip rc-captain';chip.textContent='Captain';
+    document.getElementById('sb-captain-section').classList.remove('hidden');
+  } else if (S.myTeamRole==='co_captain') {
+    chip.className='role-chip rc-cocap';chip.textContent='Co-Captain';
+    document.getElementById('sb-captain-section').classList.remove('hidden');
+  } else if (S.myTeamName) {
+    chip.className='role-chip rc-member';chip.textContent='Member';
+  } else {
+    chip.className='role-chip rc-free';chip.textContent='Free Agent';
+  }
+  renderOverview();
+  renderMyTeamTab();
+  renderDashScrims();
+  if (isOwner()) loadOwnerPanel();
+}
+
+function showDashTab(tab, btn) {
+  document.querySelectorAll('.sidebar-item').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#dash-main .tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('dash-'+tab).classList.add('active');
+}
+
+function renderOverview() {
+  if (!S.myTeamName) {
+    document.getElementById('ov-no-team').style.display='';
+    document.getElementById('ov-team-info').classList.add('hidden');
+    return;
+  }
+  document.getElementById('ov-no-team').style.display='none';
+  document.getElementById('ov-team-info').classList.remove('hidden');
+  const team = S.teams[S.myTeamName];
+  const abbr = team?.abbreviation||'?';
+  const logo = team?.logo_url ? `<img src="${team.logo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` : abbr;
+  const status = team?.official ? '<span class="pill pill-official">★ Official</span>' : '<span class="pill pill-pending">Pending</span>';
+  const roleChip = S.myTeamRole==='captain'?'<span class="role-chip rc-captain">Captain</span>':S.myTeamRole==='co_captain'?'<span class="role-chip rc-cocap">Co-Captain</span>':'<span class="role-chip rc-member">Member</span>';
+  const myMine = S.scrims.filter(s=>s.team_a===S.myTeamName||s.team_b===S.myTeamName).slice(0,3);
+  document.getElementById('ov-team-info').innerHTML = `
+    <div class="card" style="margin-bottom:1rem">
+      <div class="flex items-center gap-3 flex-wrap">
+        <div class="team-logo-circle" style="width:60px;height:60px;font-size:1.2rem">${logo}</div>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--text)">${S.myTeamName} [${abbr}]</div>
+          <div class="flex gap-1 items-center" style="margin-top:4px">${status} ${roleChip} <span class="text-muted small">${team?.members?.length||0}/25 members</span></div>
+        </div>
+        <div style="margin-left:auto;display:flex;gap:0.4rem;flex-wrap:wrap;">
+          <button class="btn btn-outline btn-sm" onclick="showDashTab('myteam',document.querySelector('.sidebar-item:nth-child(5)'))">View Roster</button>
+          ${isCaptainOrCo()?`<button class="btn btn-ghost btn-sm" onclick="showDashTab('editteam',document.querySelector('#sb-editteam-btn'))">Edit Team</button>`:''}
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem">Recent Scrims</div>
+      ${myMine.length ? myMine.map(scrimCard).join('') : '<div class="text-muted text-center" style="padding:1rem">No scrims yet.</div>'}
+    </div>
+  `;
+}
+
+function renderMyTeamTab() {
+  const el = document.getElementById('myteam-content');
+  if (!S.myTeamName) { el.innerHTML='<div class="empty-state"><h3>NO TEAM</h3><p>You are not on a team.</p></div>'; return; }
+  const team = S.teams[S.myTeamName];
+  const roster = team.members.map(uid=>{
+    const role = uid===team.captain?'captain':uid===team.co_captain?'co_captain':'member';
+    const chip = role==='captain'?'<span class="role-chip rc-captain">Captain</span>':role==='co_captain'?'<span class="role-chip rc-cocap">Co-Captain</span>':'<span class="role-chip rc-member">Member</span>';
+    const isMe = parseInt(S.user?.id)===uid;
+    return `<div class="roster-row">
+      <div class="roster-user">
+        <img class="roster-avatar" src="https://cdn.discordapp.com/embed/avatars/${uid%5}.png" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"/>
+        <span class="roster-name">&lt;@${uid}&gt; ${isMe?'<span style="color:var(--green);font-size:0.75rem">(you)</span>':''}</span>
+      </div>
+      <div class="flex gap-1 items-center">
+        ${chip}
+        ${isMe && role!=='captain' ? `<button class="btn btn-danger btn-xs" onclick="leaveTeam()">Leave</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  el.innerHTML = `
+    <div class="card">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem">Roster (${team.members.length}/25)</div>
+      ${roster}
+    </div>
+    ${team.team_discord ? `<div class="mt-2"><a href="${team.team_discord}" target="_blank" class="btn btn-outline">Join Team Discord ↗</a></div>` : ''}
+    ${parseInt(S.user?.id)===team.captain ? `<div class="mt-2"><button class="btn btn-danger btn-sm" onclick="disbandTeam()">Disband Team</button></div>` : ''}
+  `;
+  // Pre-fill edit form
+  document.getElementById('edit-name').value = S.myTeamName;
+  document.getElementById('edit-abbr').value = team.abbreviation||'';
+  document.getElementById('edit-logo').value = team.logo_url||'';
+  document.getElementById('edit-discord').value = team.team_discord||'';
+  if (team.logo_url) {
+    document.getElementById('logo-preview').src = team.logo_url;
+    document.getElementById('logo-preview').classList.remove('hidden');
+    document.getElementById('logo-upload-placeholder').classList.add('hidden');
+  }
+}
+
+function renderDashScrims() {
+  const el = document.getElementById('dash-scrims-content');
+  if (!S.myTeamName) { el.innerHTML='<div class="empty-state"><h3>NO TEAM</h3></div>'; return; }
+  const mine = S.scrims.filter(s=>s.team_a===S.myTeamName||s.team_b===S.myTeamName);
+  el.innerHTML = mine.length ? mine.map(scrimCard).join('') : '<div class="empty-state"><h3>NO SCRIMS</h3><p>Schedule your first scrim above.</p></div>';
+}
+
+async function leaveTeam() {
+  if (!confirm('Leave your current team?')) return;
+  const res = await api('/teams/leave','POST',{user_id:parseInt(S.user.id),team_name:S.myTeamName});
+  if (res.error) { toast(res.error,'error'); return; }
+  toast('Left team.','info'); await loadAll(); renderDashboard();
+}
+
+async function disbandTeam() {
+  if (!confirm(`Disband "${S.myTeamName}"? This cannot be undone.`)) return;
+  const res = await api('/teams/disband','POST',{team_name:S.myTeamName,user_id:parseInt(S.user.id)});
+  if (res.error) { toast(res.error,'error'); return; }
+  toast('Team disbanded.','info'); await loadAll(); renderDashboard();
+}
+
+async function sendInvite() {
+  const userId = document.getElementById('invite-userid').value.trim();
+  const el = document.getElementById('invite-result');
+  if (!userId) { el.innerHTML=`<div class="alert alert-error">Enter a user ID.</div>`; return; }
+  const data = await api('/teams/invite','POST',{team_name:S.myTeamName,target_id:parseInt(userId),inviter_id:parseInt(S.user.id)});
+  el.innerHTML = data.error ? `<div class="alert alert-error">❌ ${data.error}</div>` : `<div class="alert alert-success">✅ Invite sent! Bot will DM them.</div>`;
+}
+
+function handleLogoUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    S.editLogoBase64 = e.target.result;
+    document.getElementById('logo-preview').src = e.target.result;
+    document.getElementById('logo-preview').classList.remove('hidden');
+    document.getElementById('logo-upload-placeholder').classList.add('hidden');
+    document.getElementById('edit-logo').value = '';
+  };
+  reader.readAsDataURL(file);
+}
+
+function previewLogoUrl(url) {
+  if (!url) return;
+  document.getElementById('logo-preview').src = url;
+  document.getElementById('logo-preview').classList.remove('hidden');
+  document.getElementById('logo-upload-placeholder').classList.add('hidden');
+  S.editLogoBase64 = null;
+}
+
+async function saveTeamEdit() {
+  const newName = document.getElementById('edit-name').value.trim();
+  const abbr = document.getElementById('edit-abbr').value.trim().toUpperCase();
+  const logoUrl = document.getElementById('edit-logo').value.trim();
+  const disc = document.getElementById('edit-discord').value.trim();
+  const el = document.getElementById('edit-team-result');
+  const data = await api('/teams/edit','POST',{
+    old_name: S.myTeamName,
+    new_name: newName||null,
+    abbreviation: abbr||null,
+    logo_url: S.editLogoBase64||logoUrl||null,
+    team_discord: disc||null,
+    user_id: parseInt(S.user.id),
+  });
+  if (data.error) { el.innerHTML=`<div class="alert alert-error">❌ ${data.error}</div>`; }
+  else { el.innerHTML=`<div class="alert alert-success">✅ Team updated!</div>`; await loadAll(); renderMyTeamTab(); }
+}
+
+// ══════════════════════════════════════════════
+//  OWNER PANEL
+// ══════════════════════════════════════════════
+async function loadOwnerPanel() {
+  const teams = Object.values(S.teams);
+  document.getElementById('owner-stat-grid').innerHTML = [
+    ['Total Teams', teams.length],
+    ['Official Teams', teams.filter(t=>t.official).length],
+    ['Total Players', teams.reduce((a,t)=>a+t.members.length,0)],
+    ['Suspended Players', Object.keys(S.suspensions.players||{}).length],
+    ['Suspended Teams', Object.keys(S.suspensions.teams||{}).length],
+  ].map(([lbl,num])=>`<div class="owner-stat-card"><div class="owner-stat-num">${num}</div><div class="owner-stat-lbl">${lbl}</div></div>`).join('');
+
+  document.getElementById('owner-teams-list').innerHTML = `<div class="card-grid">
+    ${Object.entries(S.teams).map(([name,team])=>`
+      <div class="card">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;color:var(--text);margin-bottom:0.35rem">${name} [${team.abbreviation||'?'}]</div>
+        <div class="text-muted small" style="margin-bottom:0.75rem">${team.members.length} members · ${team.official?'★ Official':'Pending'}</div>
+        <div class="flex gap-1 flex-wrap">
+          ${!team.official?`<button class="btn btn-primary btn-xs" onclick="makeOfficial('${esc(name)}')">Make Official</button>`:''}
+          <button class="btn btn-danger btn-xs" onclick="ownerDisband('${esc(name)}')">Disband</button>
+        </div>
+      </div>
+    `).join('')||'<div class="text-muted">No teams.</div>'}
+  </div>`;
+
+  const sp = Object.entries(S.suspensions.players||{});
+  const st = Object.entries(S.suspensions.teams||{});
+  let sHtml = '';
+  if (sp.length) sHtml += sp.map(([uid,e])=>`<div class="scrim-card"><div><div style="font-weight:600">&lt;@${uid}&gt;</div><div class="text-muted small">${e.reason}</div></div><button class="btn btn-outline btn-xs" onclick="liftSusp('player','${uid}')">Lift</button></div>`).join('');
+  if (st.length) sHtml += st.map(([tn,e])=>`<div class="scrim-card"><div><div style="font-weight:600">${tn}</div><div class="text-muted small">${e.reason}</div></div><button class="btn btn-outline btn-xs" onclick="liftSusp('team','${esc(tn)}')">Lift</button></div>`).join('');
+  document.getElementById('owner-susp-list').innerHTML = sHtml || '<div class="text-muted">No active suspensions.</div>';
+}
+
+function switchTab(context, tab, btn) {
+  const prefix = context==='owner' ? 'owner-tab-' : (context==='scrims' ? 'scrims-tab-' : '');
+  const parent = btn.closest('.tabs');
+  parent.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const mainEl = parent.nextElementSibling;
+  let el = mainEl;
+  while (el) {
+    if (el.classList.contains('tab-panel')) el.classList.remove('active');
+    el = el.nextElementSibling;
+  }
+  const target = document.getElementById(prefix+tab);
+  if (target) target.classList.add('active');
+}
+
+async function makeOfficial(name) {
+  if (!isOwner()) return;
+  const res = await api('/teams/official','POST',{team_name:name,user_id:parseInt(S.user.id)});
+  if (res.error) { toast(res.error,'error'); return; }
+  toast(`${name} is now official!`,'success');
+  await loadAll(); renderTeamsGrid(); loadOwnerPanel(); closeModal('modal-team-detail');
+}
+
+async function ownerDisband(name) {
+  if (!isOwner()) return;
+  if (!confirm(`Disband "${name}"?`)) return;
+  const res = await api('/teams/disband','POST',{team_name:name,user_id:parseInt(S.user.id)});
+  if (res.error) { toast(res.error,'error'); return; }
+  toast(`${name} disbanded.`,'info'); await loadAll(); renderTeamsGrid(); loadOwnerPanel(); closeModal('modal-team-detail');
+}
+
+async function liftSusp(type, key) {
+  const path = type==='player' ? '/suspensions/unsuspend-player' : '/suspensions/unsuspend-team';
+  const body = type==='player' ? {user_id:parseInt(key)} : {team_name:key};
+  body.moderator_id = parseInt(S.user.id);
+  const res = await api(path,'POST',body);
+  if (res.error) { toast(res.error,'error'); return; }
+  toast('Suspension lifted.','success'); await loadAll(); loadOwnerPanel();
+}
+
+async function sendAnnouncement() {
+  const msg = document.getElementById('announce-msg').value.trim();
+  const channel = document.getElementById('announce-ch').value;
+  const el = document.getElementById('announce-result');
+  if (!msg) { el.innerHTML=`<div class="alert alert-error">Message cannot be empty.</div>`; return; }
+  const data = await api('/announce','POST',{message:msg,channel,user_id:parseInt(S.user.id)});
+  if (data.error) { el.innerHTML=`<div class="alert alert-error">❌ ${data.error}</div>`; }
+  else { el.innerHTML=`<div class="alert alert-success">✅ Sent!</div>`; document.getElementById('announce-msg').value=''; }
+}
+
+// ══════════════════════════════════════════════
+//  MODAL / TOAST HELPERS
+// ══════════════════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target===o) o.classList.remove('open'); });
+});
+
+function toast(msg, type='info') {
+  const el = document.createElement('div');
+  const icons = {success:'✅',error:'❌',info:'ℹ️',warn:'⚠️'};
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span>${icons[type]||'•'}</span><span>${msg}</span>`;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(()=>el.remove(), 4000);
+}
+
+// ══════════════════════════════════════════════
+//  DRAG & DROP
+// ══════════════════════════════════════════════
+['ct-upload-zone','logo-upload-zone'].forEach(id=>{
+  const zone = document.getElementById(id);
+  if (!zone) return;
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault(); zone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (!file || !file.type.startsWith('image/')) { toast('Please drop an image file.','error'); return; }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const b64 = ev.target.result;
+      if (id==='ct-upload-zone') {
+        S.ctLogoBase64 = b64;
+        document.getElementById('ct-logo-preview').src = b64;
+        document.getElementById('ct-logo-preview').classList.remove('hidden');
+        document.getElementById('ct-upload-placeholder').classList.add('hidden');
+      } else {
+        S.editLogoBase64 = b64;
+        document.getElementById('logo-preview').src = b64;
+        document.getElementById('logo-preview').classList.remove('hidden');
+        document.getElementById('logo-upload-placeholder').classList.add('hidden');
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+function esc(s) { return String(s).replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+
+// ══════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════
+async function init() {
+  const savedUser = localStorage.getItem('gtl_user');
+  if (savedUser) { try { S.user = JSON.parse(savedUser); renderNav(); } catch(e){} }
+  if (window.location.hash.includes('access_token')) await handleOAuth();
+  await loadAll();
+  renderNav();
+}
+
+init();
+</script>
+</body>
+</html>
