@@ -1,5 +1,10 @@
 import os
-from flask import Flask, request, jsonify
+@app.route("/")
+def home():
+    return jsonify({
+        "status": "GTL API is running",
+        "message": "The backend is alive. Somehow."
+    })
 from flask_cors import CORS
 import discord
 from discord.ext import commands
