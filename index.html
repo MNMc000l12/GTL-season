@@ -715,11 +715,19 @@ nav{
 //  CONFIG — UPDATE THESE
 // ══════════════════════════════════════════════
 const CONFIG = {
+  // This is your Discord Application ID / Client ID.
+  // This is public. It is NOT your bot token.
   DISCORD_CLIENT_ID: '1493073372207386747',
+
+  // Since Railway is serving your website now, this should work.
   REDIRECT_URI: window.location.origin + window.location.pathname,
-  API_BASE: 'gtl-website-production-2fdb.up.railway.app',
+
+  // This is your Railway backend/site URL.
+  API_BASE: 'https://gtl-website-production-2fdb.up.railway.app',
+
   OWNER_ID: '779805628804890644',
-  // Role IDs that can access scrims
+
+  // Role IDs
   TEAM_MEMBER_ROLE_ID: '1218334966341959750',
   SEASON_MANAGER_ROLE_ID: '1102378245216813127',
 };
