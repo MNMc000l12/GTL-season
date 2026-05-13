@@ -1,4 +1,4 @@
 flask
 flask-cors
 discord.py
-gunicorn
+python-dotenv
