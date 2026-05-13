@@ -1,0 +1,169 @@
+{
+  "The Bullet Bills": {
+    "captain": 770714170630864958,
+    "co_captain": null,
+    "members": [
+      770714170630864958,
+      1462591476616925228,
+      990306458723836034
+    ],
+    "abbreviation": "BLT",
+    "logo_url": null,
+    "team_discord": "https://discord.gg/MFXEuPKd9",
+    "official": true,
+    "created_at": "2026-05-04T04:14:03.982490+00:00"
+  },
+  "Valent": {
+    "captain": 1431681510347374603,
+    "co_captain": null,
+    "members": [
+      1431681510347374603,
+      1470141366032924732,
+      1074053972744208396
+    ],
+    "abbreviation": "VLNT",
+    "logo_url": null,
+    "team_discord": null,
+    "official": true,
+    "created_at": "2026-05-04T20:55:51.884703+00:00"
+  },
+  "Manifest destiny": {
+    "captain": 1446598778801885407,
+    "co_captain": null,
+    "members": [
+      1446598778801885407
+    ],
+    "abbreviation": "AIK",
+    "logo_url": null,
+    "team_discord": "https://discord.gg/manifestdestiny",
+    "official": true,
+    "created_at": "2026-05-05T21:24:54.541472+00:00"
+  },
+  "Spooky Spoons": {
+    "captain": 1484371060769030255,
+    "co_captain": null,
+    "members": [
+      1484371060769030255,
+      1443663613104619540,
+      1122568415698239528,
+      1493455890479583262,
+      1298832434321690705,
+      1497300805492146380
+    ],
+    "abbreviation": "SS",
+    "logo_url": null,
+    "team_discord": null,
+    "official": true,
+    "created_at": "2026-05-07T15:40:54.453094+00:00"
+  },
+  "Oblivion": {
+    "captain": 1361824986922356946,
+    "co_captain": null,
+    "members": [
+      1361824986922356946,
+      1168313592119033988,
+      1451709310542282804
+    ],
+    "abbreviation": "OBL",
+    "logo_url": null,
+    "team_discord": "https://discord.gg/mUnTEcy7",
+    "official": true,
+    "created_at": "2026-05-08T01:53:52.017647+00:00"
+  },
+  "Candy Cane": {
+    "captain": 1239849861411639346,
+    "co_captain": null,
+    "members": [
+      1256340374788505784,
+      1239849861411639346,
+      1125218621791162448,
+      1065816802266972190,
+      1167301291484123191,
+      1503179729283317863,
+      1239754056482947154
+    ],
+    "abbreviation": "CC",
+    "logo_url": null,
+    "team_discord": "https://discord.gg/GrydKWGtx",
+    "official": true,
+    "created_at": "2026-05-10T20:26:08.181581+00:00"
+  },
+  "SILLY": {
+    "captain": 1127793963420614677,
+    "co_captain": null,
+    "members": [
+      1127793963420614677,
+      977734177497686036,
+      1319148956583989249
+    ],
+    "abbreviation": "SILLY",
+    "logo_url": null,
+    "team_discord": null,
+    "official": true,
+    "created_at": "2026-05-11T01:03:52.067274+00:00"
+  },
+  "Vital": {
+    "captain": 1313012700900753442,
+    "co_captain": null,
+    "members": [
+      1313012700900753442,
+      1294722369566281842,
+      1493348157327671330
+    ],
+    "abbreviation": "VTL",
+    "logo_url": null,
+    "team_discord": null,
+    "official": true,
+    "created_at": "2026-05-11T02:39:49.752542+00:00"
+  },
+  "Monster Addicts": {
+    "captain": 1274454469475827766,
+    "co_captain": null,
+    "members": [
+      1274454469475827766
+    ],
+    "abbreviation": "MA",
+    "logo_url": null,
+    "team_discord": null,
+    "official": false,
+    "created_at": "2026-05-11T03:12:51.779564+00:00"
+  },
+  "Titan": {
+    "captain": 1458124143093485845,
+    "co_captain": 1122524585259171916,
+    "members": [
+      1122524585259171916,
+      1458124143093485845,
+      539030010837860352
+    ],
+    "abbreviation": "TTN",
+    "logo_url": null,
+    "team_discord": null,
+    "official": true,
+    "created_at": "2026-05-11T21:24:26.464700+00:00"
+  },
+  "ZENIN CLAN": {
+    "captain": 1384907647441961012,
+    "co_captain": null,
+    "members": [
+      1384907647441961012
+    ],
+    "abbreviation": "ZEN",
+    "logo_url": null,
+    "team_discord": null,
+    "official": true,
+    "created_at": "2026-05-12T12:28:57.651709+00:00"
+  },
+  "Xtremely Quick Climbers": {
+    "captain": 1037858157873078272,
+    "co_captain": null,
+    "members": [
+      1037858157873078272
+    ],
+    "abbreviation": "XQC",
+    "logo_url": null,
+    "team_discord": "https://discord.gg/CPa5Q3YRU",
+    "official": true,
+    "created_at": "2026-05-12T21:01:43.713642+00:00"
+  }
+}
