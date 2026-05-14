@@ -4,6 +4,8 @@ import asyncio
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import discord
+import psycopg2
+import psycopg2.extras
 from discord.ext import commands
 
 app = Flask(__name__)
@@ -91,6 +93,107 @@ def find_user_team(user_id):
 def user_is_captain_or_cocaptain(user_id, team):
     user_id = int(user_id)
     return user_id == team.get("captain") or user_id == team.get("co_captain")
+    
+    DATABASE_URL = os.getenv("DATABASE_URL")
+
+
+def get_db_connection():
+    if not DATABASE_URL:
+        raise RuntimeError("DATABASE_URL is missing. Add PostgreSQL to Railway and connect it to this service.")
+    return psycopg2.connect(DATABASE_URL)
+
+
+def init_db():
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS teams (
+            name TEXT PRIMARY KEY,
+            abbreviation TEXT NOT NULL,
+            captain BIGINT NOT NULL,
+            co_captain BIGINT,
+            official BOOLEAN DEFAULT FALSE,
+            logo_url TEXT,
+            team_discord TEXT,
+            captain_username TEXT,
+            created_at TEXT
+        );
+    """)
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS team_members (
+            team_name TEXT REFERENCES teams(name) ON DELETE CASCADE,
+            user_id BIGINT NOT NULL,
+            PRIMARY KEY (team_name, user_id)
+        );
+    """)
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS seasons (
+            name TEXT PRIMARY KEY,
+            status TEXT DEFAULT 'creating',
+            created_by BIGINT,
+            created_at TEXT,
+            started_by BIGINT,
+            started_at TEXT,
+            ended_by BIGINT,
+            ended_at TEXT,
+            end_reason TEXT,
+            is_current BOOLEAN DEFAULT FALSE
+        );
+    """)
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS season_teams (
+            season_name TEXT REFERENCES seasons(name) ON DELETE CASCADE,
+            team_name TEXT REFERENCES teams(name) ON DELETE CASCADE,
+            PRIMARY KEY (season_name, team_name)
+        );
+    """)
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS season_kicked_teams (
+            id SERIAL PRIMARY KEY,
+            season_name TEXT REFERENCES seasons(name) ON DELETE CASCADE,
+            team_name TEXT,
+            reason TEXT,
+            kicked_by BIGINT,
+            kicked_at TEXT
+        );
+    """)
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS suspensions (
+            id SERIAL PRIMARY KEY,
+            suspension_type TEXT NOT NULL,
+            target TEXT NOT NULL,
+            reason TEXT,
+            seasons INTEGER,
+            duration TEXT,
+            suspended_by BIGINT,
+            suspended_at TEXT,
+            active BOOLEAN DEFAULT TRUE
+        );
+    """)
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS scrims (
+            id SERIAL PRIMARY KEY,
+            team_a TEXT,
+            team_b TEXT,
+            opponent TEXT,
+            date TEXT,
+            time TEXT,
+            notes TEXT,
+            created_by BIGINT,
+            status TEXT DEFAULT 'open'
+        );
+    """)
+
+    conn.commit()
+    cur.close()
+    conn.close()
 
 
 # ==========================================================
